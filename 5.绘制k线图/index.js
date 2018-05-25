@@ -1,3 +1,4 @@
+// 日期，开盘价、最低价、最高价、收盘价、交易量、交易金额。
 const dataset = [
     ['2011-12-16', 25.000, 24.900, 26.800, 26.440, 1171773, 3013978000.00],
     ['2011-12-19', 26.210, 26.000, 27.490, 26.960, 524161, 1393216000.00],
@@ -60,4 +61,30 @@ svg.selectAll('rect')
 	 .data(dataset)
 	 .enter()
 	 .append('rect')
-	 .attr(rect_attr)
+   .attr(rect_attr)
+
+const data_cnt = dataset.length;
+const barpadding = 4;
+svg.selectAll('line')  
+   .data(dataset)
+   .enter()
+   .append('line')
+   .attr({
+      'x1': (d, i) => {
+        return i * (width / data_cnt) + (width / data_cnt - barpadding) / 2;
+      },
+      'x2': (d, i) => {
+        return i * (width / data_cnt) + (width / data_cnt - barpadding) / 2;
+      },
+      'y1': (d, i) => {
+        return height - yScale(d3.max(d.slice(1, 5)));
+      },
+      'y2': (d, i) => {
+        return height - yScale(d3.min(d.slice(1, 5)));
+      },
+      stroke: (d) => {
+        // return 'red'
+        if (d[1] < d[4]) return 'red';
+        else return 'green';
+      }
+   })
